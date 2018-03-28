@@ -7,7 +7,7 @@ before_script:
 
 deploy:
   script:
-    - ansible-playbook docker.yaml -i hosts.ini
+    - sudo ansible-playbook docker.yaml -i hosts.ini
   stage: deploy
   tags:
     - shell
