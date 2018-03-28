@@ -1,0 +1,3 @@
+{
+    "insecure-registries" : [ "peer-mountain01:5005" ]
+}

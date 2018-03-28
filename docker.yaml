@@ -20,6 +20,22 @@
     - name: enable vm.max_map_count without rebooting
       shell: sysctl -w vm.max_map_count=262144
 
+    - name: copy docker configuration file
+      copy:
+        src: docker/daemon.json
+        dst: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - restart docker
+
+  handlers:
+    - name: restart docker
+      service:
+        name: docker
+        state: restarted
+
 # peer-mountain01 is the Docker Swarm Manager
 # so we run all docker related commands here
 - hosts: peer-mountain01
