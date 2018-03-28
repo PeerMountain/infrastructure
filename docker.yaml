@@ -20,6 +20,8 @@
     - name: enable vm.max_map_count without rebooting
       shell: sysctl -w vm.max_map_count=262144
 
+# peer-mountain01 is the Docker Swarm Manager
+# so we run all docker related commands here
 - hosts: peer-mountain01
   remote_user: root
   become: yes
@@ -39,11 +41,17 @@
         - writer
         - elasticsearch
 
-    - name: add docker labels
+    - name: add docker labels on peer-mountain01
       shell: docker node update --label-add "{{ item }}" peer-mountain01
       loop:
         - "elasticsearch=1"
         - "rabbitmq=1"
+
+    - name: add docker labels on peer-mountain02
+      shell: docker node update --label-add "{{ item }}" peer-mountain02
+      loop:
+        - "elasticsearch=2"
+        - "rabbitmq=2"
 
     - name: add folders for docker binded containers
       file:
@@ -58,13 +66,6 @@
   remote_user: root
   become: yes
   become_method: sudo
-
-  tasks:
-    - name: add docker labels
-      shell: docker node update --label-add "{{ item }}" peer-mountain02
-      loop:
-        - "elasticsearch=2"
-        - "rabbitmq=2"
 
     - name: add folders for docker binded containers
       file:
