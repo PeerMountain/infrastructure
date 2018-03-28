@@ -69,14 +69,19 @@
         - "elasticsearch=2"
         - "rabbitmq=2"
 
-    - name: add folders for docker binded containers
+    - name: add folder for rabbitmq
       file:
-        path: /data/"{{ item }}"
+        path: /data/rabbitmq
         state: directory
         mode: 0755
-      loop:
-        - elasticsearch
-        - rabbitmq
+
+    - name: add folder for elasticsearch
+      file:
+        path: /data/elasticsearch
+        state: directory
+        owner: 1000
+        group: 1000
+        mode: 0755
 
 - hosts: peer-mountain02
   remote_user: root
@@ -84,11 +89,16 @@
   become_method: sudo
 
   tasks:
-    - name: add folders for docker binded containers
+    - name: add folder for rabbitmq
       file:
-        path: /data/"{{ item }}"
+        path: /data/rabbitmq
         state: directory
         mode: 0755
-      loop:
-        - elasticsearch
-        - rabbitmq
+
+    - name: add folder for elasticsearch
+      file:
+        path: /data/elasticsearch
+        state: directory
+        owner: 1000
+        group: 1000
+        mode: 0755
