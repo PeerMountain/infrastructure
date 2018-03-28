@@ -1,0 +1,76 @@
+---
+
+- hosts: all
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: install python-docker
+      apt:
+        name: python-docker
+        update_cache: yes
+
+    - name: raise vm.max_map_count to 262144
+      lineinfile:
+        path: /etc/sysctl.conf
+        regexp: '^vm.max_map_count='
+        line: 'vm.max_map_count=262144'
+
+    - name: enable vm.max_map_count without rebooting
+      shell: sysctl -w vm.max_map_count=262144
+
+- hosts: peer-mountain01
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: create docker networks
+      docker_network:
+        name: "{{ item }}"
+        driver: overlay
+      loop:
+        - teleferic
+        - reader
+        - rabbitmq
+        - consul
+        - authorizer
+        - writer
+        - elasticsearch
+
+    - name: add docker labels
+      shell: docker node update --label-add "{{ item }}" peer-mountain01
+      loop:
+        - "elasticsearch=1"
+        - "rabbitmq=1"
+
+    - name: add folders for docker binded containers
+      file:
+        path: /data/"{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - elasticsearch
+        - rabbitmq
+
+- hosts: peer-mountain02
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: add docker labels
+      shell: docker node update --label-add "{{ item }}" peer-mountain02
+      loop:
+        - "elasticsearch=2"
+        - "rabbitmq=2"
+
+    - name: add folders for docker binded containers
+      file:
+        path: /data/"{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - elasticsearch
+        - rabbitmq

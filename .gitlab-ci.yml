@@ -1,0 +1,16 @@
+before_script:
+  - apt-get install ansible -y
+
+deploy:
+  script:
+    - ansible-playbook docker.yaml -i hosts.ini
+  stage: deploy
+  tags:
+    - shell
+    - pm01
+  only:
+    - tags
+    - triggers
+
+stages:
+  - deploy
