@@ -5,7 +5,7 @@ before_script:
   - sudo apt-get update
   - sudo apt-get install ansible -y
 
-deploy:
+docker_setup:
   script:
     - sudo ansible-playbook docker.yaml -i hosts.ini
   stage: deploy
@@ -16,5 +16,17 @@ deploy:
     - tags
     - triggers
 
+gitlab_setup:
+  script:
+    - sudo ansible-playbook gitlab.yaml -i hosts.ini
+  stage: deploy
+  tags:
+    - shell
+    - pm01
+  only:
+    - tags
+    - triggers
+
 stages:
-  - deploy
+  - docker_setup
+  - gitlab_setup

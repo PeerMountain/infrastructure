@@ -1,0 +1,39 @@
+- hosts: peer-mountain01
+  remote_user: root
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: configure gitlab
+      copy:
+        src: gitlab/gitlab.rb
+        dst: /etc/gitlab/gitlab.rb
+        owner: root
+        group: root
+        mode: 0600
+      notify:
+        - restart gitlab
+
+    - name: copy gitlab SSL crt
+      copy:
+        src: gitlab/peer-mountain01.crt
+        dst: /etc/gitlab/ssl/peer-mountain01.crt
+        owner: root
+        group: root
+        mode: 0600
+      notify:
+        - restart gitlab
+
+    - name: copy gitlab SSL key
+      copy:
+        src: gitlab/peer-mountain01.key
+        dst: /etc/gitlab/ssl/peer-mountain01.key
+        owner: root
+        group: root
+        mode: 0600
+      notify:
+        - restart gitlab
+
+  handlers:
+    - name: restart gitlab
+      shell: gitlab-ctl reconfigure
