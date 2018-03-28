@@ -23,7 +23,7 @@
     - name: copy docker configuration file
       copy:
         src: docker/daemon.json
-        dst: /etc/docker/daemon.json
+        dest: /etc/docker/daemon.json
         owner: root
         group: root
         mode: 0644

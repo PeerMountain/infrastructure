@@ -7,7 +7,7 @@
     - name: configure gitlab
       copy:
         src: gitlab/gitlab.rb
-        dst: /etc/gitlab/gitlab.rb
+        dest: /etc/gitlab/gitlab.rb
         owner: root
         group: root
         mode: 0600
@@ -17,7 +17,7 @@
     - name: copy gitlab SSL crt
       copy:
         src: gitlab/peer-mountain01.crt
-        dst: /etc/gitlab/ssl/peer-mountain01.crt
+        dest: /etc/gitlab/ssl/peer-mountain01.crt
         owner: root
         group: root
         mode: 0600
@@ -27,7 +27,7 @@
     - name: copy gitlab SSL key
       copy:
         src: gitlab/peer-mountain01.key
-        dst: /etc/gitlab/ssl/peer-mountain01.key
+        dest: /etc/gitlab/ssl/peer-mountain01.key
         owner: root
         group: root
         mode: 0600
