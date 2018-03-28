@@ -8,7 +8,7 @@ before_script:
 docker_setup:
   script:
     - sudo ansible-playbook docker.yaml -i hosts.ini
-  stage: deploy
+  stage: docker_setup
   tags:
     - shell
     - pm01
@@ -19,7 +19,7 @@ docker_setup:
 gitlab_setup:
   script:
     - sudo ansible-playbook gitlab.yaml -i hosts.ini
-  stage: deploy
+  stage: gitlab_setup
   tags:
     - shell
     - pm01
