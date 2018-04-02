@@ -62,6 +62,7 @@
       loop:
         - "elasticsearch=1"
         - "rabbitmq=1"
+        - "portainer=1"
 
     - name: add docker labels on peer-mountain02
       shell: docker node update --label-add "{{ item }}" peer-mountain02
@@ -72,6 +73,12 @@
     - name: add folder for rabbitmq
       file:
         path: /data/rabbitmq
+        state: directory
+        mode: 0755
+
+    - name: add folder for portainer
+      file:
+        path: /data/portainer
         state: directory
         mode: 0755
 
