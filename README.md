@@ -150,7 +150,7 @@ $ tree -L 1
 #!/bin/bash
 
 echo "Initializing HBase..."
-cd writer && docker-compose -f docker-compose-development.yml up -d hbase && cd ..
+cd writer && git submodule init && git submodule update && docker-compose -f docker-compose-development.yml up -d hbase && cd ..
 
 echo "Initializing ES..."
 cd writer && docker-compose -f docker-compose-development.yml up -d elasticsearch && cd ..
@@ -162,7 +162,7 @@ echo "Initializing Writer..."
 cd writer && docker-compose -f docker-compose-development.yml up -d writer && cd ..
 
 echo "Initializing Reader..."
-cd reader && docker-compose -f docker-compose-development.yml up -d reader && cd ..
+cd reader && git submodule init && git submodule update && docker-compose -f docker-compose-development.yml up -d reader && cd ..
 
 echo "Initializing Authorizer..."
 cd authorizer && docker-compose -f docker-compose-development.yml up -d authorizer && cd ..
@@ -193,6 +193,9 @@ utils.create_hbase_persona_table()
 From the same console, Initialize the *Genesis Persona*:
 
 ```python
+from himalaya_models.models import Persona
+
+
 pubkey = "genesis_persona_pubkey_here"
 address = "genesis_persona_address_here"
 nickname = "genesis_persona_nickname_here"
